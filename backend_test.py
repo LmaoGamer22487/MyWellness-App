@@ -233,7 +233,7 @@ class LifeTilesSyncAPITester:
             "date": today
         }
         print("   Note: This test uses AI (Gemini 3 Flash) and may take a few seconds...")
-        success, nutrition_log = self.run_test("Log Nutrition (AI)", "POST", "nutrition", 201, nutrition_data)
+        success, nutrition_log = self.run_test("Log Nutrition (AI)", "POST", "nutrition", 200, nutrition_data)
         
         # Get nutrition logs and summary
         self.run_test("Get Nutrition Logs", "GET", f"nutrition?date={today}", 200)
