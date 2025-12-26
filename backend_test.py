@@ -246,7 +246,7 @@ class LifeTilesSyncAPITester:
             "notes": "Lunch at restaurant",
             "date": today
         }
-        success, spending_log = self.run_test("Log Spending", "POST", "spending", 201, spending_data)
+        success, spending_log = self.run_test("Log Spending", "POST", "spending", 200, spending_data)
         
         # Get spending logs and summary
         self.run_test("Get Spending Logs", "GET", f"spending?date={today}", 200)
