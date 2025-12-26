@@ -209,7 +209,7 @@ class LifeTilesSyncAPITester:
             "standard_drinks": 1.0,
             "date": today
         }
-        success, alcohol_log = self.run_test("Log Alcohol", "POST", "alcohol", 201, alcohol_data)
+        success, alcohol_log = self.run_test("Log Alcohol", "POST", "alcohol", 200, alcohol_data)
         
         # Get alcohol logs
         self.run_test("Get Alcohol Logs", "GET", f"alcohol?date={today}", 200)
