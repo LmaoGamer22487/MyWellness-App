@@ -72,7 +72,7 @@ const LandingPage = () => {
     {
       icon: Wallet,
       title: "Spending Habits",
-      description: "Track daily expenses, categorize spending, and view monthly summaries.",
+      description: "Track daily expenses, categorize spending, and export to spreadsheet.",
       color: "text-violet-500",
       bgColor: "bg-violet-50",
     },
@@ -84,9 +84,9 @@ const LandingPage = () => {
       bgColor: "bg-burgundy-50",
     },
     {
-      icon: BarChart3,
-      title: "Daily Completion",
-      description: "Visualize your daily progress across all health metrics.",
+      icon: Smartphone,
+      title: "Cross-Platform",
+      description: "Works on mobile & desktop with offline support and bi-directional sync.",
       color: "text-violet-600",
       bgColor: "bg-violet-50",
     },
@@ -103,21 +103,22 @@ const LandingPage = () => {
               data-testid="hero-title"
               className="font-heading text-5xl md:text-6xl font-bold tracking-tight text-primary mb-6"
             >
-              LifeTiles Sync
+              MyWellness App
             </h1>
             <p className="font-body text-lg md:text-xl text-muted-foreground mb-10 leading-relaxed">
-              Your personal wellness dashboard. Track alcohol, sleep, nutrition, spending, and exercise—all synced with your Google Calendar.
+              Your personal wellness dashboard. Track alcohol, sleep, nutrition, spending, and exercise—works on any device with offline sync.
             </p>
-            <Button
-              data-testid="login-button"
-              onClick={handleLogin}
-              className="bg-primary text-primary-foreground hover:bg-primary/90 h-14 px-10 rounded-full font-medium text-lg transition-transform active:scale-95 shadow-lg shadow-primary/20"
-            >
-              <svg className="w-5 h-5 mr-3" viewBox="0 0 24 24">
-                <path
-                  fill="currentColor"
-                  d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
-                />
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+              <Button
+                data-testid="login-button"
+                onClick={handleLogin}
+                className="bg-primary text-primary-foreground hover:bg-primary/90 h-14 px-10 rounded-full font-medium text-lg transition-transform active:scale-95 shadow-lg shadow-primary/20"
+              >
+                <svg className="w-5 h-5 mr-3" viewBox="0 0 24 24">
+                  <path
+                    fill="currentColor"
+                    d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                  />
                 <path
                   fill="currentColor"
                   d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
