@@ -193,7 +193,7 @@ const LandingPage = () => {
       <footer className="bg-background border-t border-border py-10">
         <div className="max-w-7xl mx-auto px-6 text-center">
           <p className="font-body text-muted-foreground">
-            © 2025 LifeTiles Sync. Built with care for your wellbeing.
+            © 2025 MyWellness App. Built with care for your wellbeing.
           </p>
         </div>
       </footer>
