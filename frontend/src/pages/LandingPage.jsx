@@ -1,12 +1,51 @@
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import { Wine, Moon, Utensils, Wallet, Dumbbell, BarChart3 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+const API = `${BACKEND_URL}/api`;
+
 // REMINDER: DO NOT HARDCODE THE URL, OR ADD ANY FALLBACKS OR REDIRECT URLS, THIS BREAKS THE AUTH
 const LandingPage = () => {
+  const navigate = useNavigate();
+  const [checking, setChecking] = useState(true);
+
+  // Check if user is already authenticated
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const response = await axios.get(`${API}/auth/me`, { withCredentials: true });
+        if (response.data?.user) {
+          // User is authenticated, redirect to dashboard
+          if (response.data.setup_completed) {
+            navigate("/dashboard", { state: { user: response.data.user }, replace: true });
+          } else {
+            navigate("/setup", { state: { user: response.data.user }, replace: true });
+          }
+        }
+      } catch (error) {
+        // Not authenticated, show landing page
+      } finally {
+        setChecking(false);
+      }
+    };
+    checkAuth();
+  }, [navigate]);
+
   const handleLogin = () => {
     const redirectUrl = window.location.origin + "/dashboard";
     window.location.href = `https://auth.emergentagent.com/?redirect=${encodeURIComponent(redirectUrl)}`;
   };
+
+  if (checking) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="w-10 h-10 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
 
   const features = [
     {
