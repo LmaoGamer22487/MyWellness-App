@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "sonner";
@@ -42,8 +42,20 @@ const Dashboard = ({ user }) => {
   const [completion, setCompletion] = useState(null);
   const [weeklyCompletion, setWeeklyCompletion] = useState([]);
   const [preferences, setPreferences] = useState(null);
+  const modalRef = useRef(null);
 
   const dateStr = format(selectedDate, "yyyy-MM-dd");
+
+  // Close modal on Escape key
+  useEffect(() => {
+    const handleEscape = (e) => {
+      if (e.key === "Escape" && activeTracker) {
+        setActiveTracker(null);
+      }
+    };
+    document.addEventListener("keydown", handleEscape);
+    return () => document.removeEventListener("keydown", handleEscape);
+  }, [activeTracker]);
 
   const fetchCompletion = useCallback(async () => {
     try {
