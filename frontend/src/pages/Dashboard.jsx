@@ -218,9 +218,17 @@ const Dashboard = ({ user }) => {
       {/* Header */}
       <header className="border-b border-border bg-card/80 backdrop-blur-sm sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 md:px-6 py-4 flex items-center justify-between">
-          <h1 className="font-heading text-xl md:text-2xl font-bold text-primary">
-            MyWellness
-          </h1>
+          <div className="flex items-center gap-3">
+            <h1 className="font-heading text-xl md:text-2xl font-bold text-primary">
+              MyWellness
+            </h1>
+            {!isOnline && (
+              <span className="flex items-center gap-1 text-xs text-orange-600 bg-orange-50 px-2 py-1 rounded-full">
+                <WifiOff className="w-3 h-3" />
+                Offline
+              </span>
+            )}
+          </div>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
@@ -237,7 +245,24 @@ const Dashboard = ({ user }) => {
                 <span className="font-body text-sm hidden md:block">{user?.name}</span>
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-48">
+            <DropdownMenuContent align="end" className="w-56">
+              <DropdownMenuItem
+                data-testid="export-spending-button"
+                onClick={handleExportSpending}
+                className="cursor-pointer"
+              >
+                <Download className="w-4 h-4 mr-2" />
+                Export Spending (CSV)
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                data-testid="export-all-button"
+                onClick={handleExportAll}
+                className="cursor-pointer"
+              >
+                <Download className="w-4 h-4 mr-2" />
+                Export All Data
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
               <DropdownMenuItem
                 data-testid="logout-button"
                 onClick={handleLogout}
