@@ -692,6 +692,218 @@ async def delete_spending_log(log_id: str, user: User = Depends(get_current_user
         raise HTTPException(status_code=404, detail="Log not found")
     return {"message": "Deleted"}
 
+# ==================== EXPORT ENDPOINTS ====================
+
+@api_router.get("/export/spending")
+async def export_spending_csv(month: Optional[str] = None, user: User = Depends(get_current_user)):
+    today = datetime.now(timezone.utc).date()
+    if month:
+        year, m = month.split("-")
+        start_date = f"{year}-{m}-01"
+        if int(m) == 12:
+            end_date = f"{int(year)+1}-01-01"
+        else:
+            end_date = f"{year}-{int(m)+1:02d}-01"
+        filename = f"spending_{month}.csv"
+    else:
+        start_date = today.replace(day=1).isoformat()
+        end_date = today.isoformat()
+        filename = f"spending_{today.strftime('%Y-%m')}.csv"
+    
+    logs = await db.spending_logs.find({
+        "user_id": user.user_id,
+        "date": {"$gte": start_date, "$lte": end_date}
+    }, {"_id": 0}).sort("date", 1).to_list(10000)
+    
+    output = io.StringIO()
+    writer = csv.writer(output)
+    writer.writerow(["Date", "Category", "Amount", "Notes"])
+    
+    for log in logs:
+        writer.writerow([
+            log.get("date", ""),
+            log.get("category", ""),
+            log.get("amount", 0),
+            log.get("notes", "")
+        ])
+    
+    # Add summary rows
+    writer.writerow([])
+    writer.writerow(["SUMMARY"])
+    total = sum(log.get("amount", 0) for log in logs)
+    writer.writerow(["Total", "", total, ""])
+    
+    by_category = {}
+    for log in logs:
+        cat = log.get("category", "Other")
+        by_category[cat] = by_category.get(cat, 0) + log.get("amount", 0)
+    
+    writer.writerow([])
+    writer.writerow(["BY CATEGORY"])
+    for cat, amt in sorted(by_category.items(), key=lambda x: -x[1]):
+        writer.writerow([cat, "", amt, ""])
+    
+    output.seek(0)
+    return StreamingResponse(
+        iter([output.getvalue()]),
+        media_type="text/csv",
+        headers={"Content-Disposition": f"attachment; filename={filename}"}
+    )
+
+@api_router.get("/export/all")
+async def export_all_data_csv(start_date: Optional[str] = None, end_date: Optional[str] = None, user: User = Depends(get_current_user)):
+    today = datetime.now(timezone.utc).date()
+    if not start_date:
+        start_date = (today - timedelta(days=30)).isoformat()
+    if not end_date:
+        end_date = today.isoformat()
+    
+    filename = f"mywellness_export_{start_date}_to_{end_date}.csv"
+    
+    # Fetch all data
+    alcohol_logs = await db.alcohol_logs.find({
+        "user_id": user.user_id,
+        "date": {"$gte": start_date, "$lte": end_date}
+    }, {"_id": 0}).sort("date", 1).to_list(10000)
+    
+    sleep_logs = await db.sleep_logs.find({
+        "user_id": user.user_id,
+        "date": {"$gte": start_date, "$lte": end_date}
+    }, {"_id": 0}).sort("date", 1).to_list(10000)
+    
+    nutrition_logs = await db.nutrition_logs.find({
+        "user_id": user.user_id,
+        "date": {"$gte": start_date, "$lte": end_date}
+    }, {"_id": 0}).sort("date", 1).to_list(10000)
+    
+    spending_logs = await db.spending_logs.find({
+        "user_id": user.user_id,
+        "date": {"$gte": start_date, "$lte": end_date}
+    }, {"_id": 0}).sort("date", 1).to_list(10000)
+    
+    exercise_logs = await db.exercise_logs.find({
+        "user_id": user.user_id,
+        "date": {"$gte": start_date, "$lte": end_date}
+    }, {"_id": 0}).sort("date", 1).to_list(10000)
+    
+    output = io.StringIO()
+    writer = csv.writer(output)
+    
+    # Alcohol section
+    writer.writerow(["=== ALCOHOL INTAKE ==="])
+    writer.writerow(["Date", "Drink", "Servings", "Standard Drinks"])
+    for log in alcohol_logs:
+        writer.writerow([log.get("date", ""), log.get("drink_name", ""), log.get("servings", 0), log.get("standard_drinks", 0)])
+    writer.writerow([])
+    
+    # Sleep section
+    writer.writerow(["=== SLEEP LOG ==="])
+    writer.writerow(["Date", "Sleep Time", "Wake Time", "Hours Slept"])
+    for log in sleep_logs:
+        writer.writerow([log.get("date", ""), log.get("sleep_time", ""), log.get("wake_time", ""), log.get("hours_slept", 0)])
+    writer.writerow([])
+    
+    # Nutrition section
+    writer.writerow(["=== NUTRITION LOG ==="])
+    writer.writerow(["Date", "Meal Type", "Description", "Calories", "Protein (g)", "Healthy"])
+    for log in nutrition_logs:
+        writer.writerow([log.get("date", ""), log.get("meal_type", ""), log.get("meal_description", ""), log.get("calories", 0), log.get("protein", 0), "Yes" if log.get("is_healthy") else "No"])
+    writer.writerow([])
+    
+    # Spending section
+    writer.writerow(["=== SPENDING LOG ==="])
+    writer.writerow(["Date", "Category", "Amount", "Notes"])
+    for log in spending_logs:
+        writer.writerow([log.get("date", ""), log.get("category", ""), log.get("amount", 0), log.get("notes", "")])
+    writer.writerow([])
+    
+    # Exercise section
+    writer.writerow(["=== EXERCISE LOG ==="])
+    writer.writerow(["Date", "Activity", "Duration (min)", "Notes"])
+    for log in exercise_logs:
+        writer.writerow([log.get("date", ""), log.get("exercise_type", ""), log.get("duration_minutes", 0), log.get("notes", "")])
+    
+    output.seek(0)
+    return StreamingResponse(
+        iter([output.getvalue()]),
+        media_type="text/csv",
+        headers={"Content-Disposition": f"attachment; filename={filename}"}
+    )
+
+# ==================== SYNC ENDPOINTS (for offline support) ====================
+
+class SyncData(BaseModel):
+    alcohol_logs: List[dict] = []
+    sleep_logs: List[dict] = []
+    nutrition_logs: List[dict] = []
+    spending_logs: List[dict] = []
+    exercise_logs: List[dict] = []
+    last_sync: Optional[str] = None
+
+@api_router.post("/sync/push")
+async def sync_push(data: SyncData, user: User = Depends(get_current_user)):
+    """Push local data to server (used when coming back online)"""
+    synced_counts = {"alcohol": 0, "sleep": 0, "nutrition": 0, "spending": 0, "exercise": 0}
+    
+    for log in data.alcohol_logs:
+        log["user_id"] = user.user_id
+        existing = await db.alcohol_logs.find_one({"id": log.get("id")})
+        if not existing:
+            await db.alcohol_logs.insert_one(log)
+            synced_counts["alcohol"] += 1
+    
+    for log in data.sleep_logs:
+        log["user_id"] = user.user_id
+        existing = await db.sleep_logs.find_one({"id": log.get("id")})
+        if not existing:
+            await db.sleep_logs.insert_one(log)
+            synced_counts["sleep"] += 1
+    
+    for log in data.nutrition_logs:
+        log["user_id"] = user.user_id
+        existing = await db.nutrition_logs.find_one({"id": log.get("id")})
+        if not existing:
+            await db.nutrition_logs.insert_one(log)
+            synced_counts["nutrition"] += 1
+    
+    for log in data.spending_logs:
+        log["user_id"] = user.user_id
+        existing = await db.spending_logs.find_one({"id": log.get("id")})
+        if not existing:
+            await db.spending_logs.insert_one(log)
+            synced_counts["spending"] += 1
+    
+    for log in data.exercise_logs:
+        log["user_id"] = user.user_id
+        existing = await db.exercise_logs.find_one({"id": log.get("id")})
+        if not existing:
+            await db.exercise_logs.insert_one(log)
+            synced_counts["exercise"] += 1
+    
+    return {"message": "Sync complete", "synced": synced_counts, "timestamp": datetime.now(timezone.utc).isoformat()}
+
+@api_router.get("/sync/pull")
+async def sync_pull(since: Optional[str] = None, user: User = Depends(get_current_user)):
+    """Pull server data to local (used when coming back online)"""
+    query = {"user_id": user.user_id}
+    if since:
+        query["logged_at"] = {"$gte": since}
+    
+    alcohol_logs = await db.alcohol_logs.find(query, {"_id": 0}).to_list(10000)
+    sleep_logs = await db.sleep_logs.find(query, {"_id": 0}).to_list(10000)
+    nutrition_logs = await db.nutrition_logs.find(query, {"_id": 0}).to_list(10000)
+    spending_logs = await db.spending_logs.find(query, {"_id": 0}).to_list(10000)
+    exercise_logs = await db.exercise_logs.find(query, {"_id": 0}).to_list(10000)
+    
+    return {
+        "alcohol_logs": alcohol_logs,
+        "sleep_logs": sleep_logs,
+        "nutrition_logs": nutrition_logs,
+        "spending_logs": spending_logs,
+        "exercise_logs": exercise_logs,
+        "timestamp": datetime.now(timezone.utc).isoformat()
+    }
+
 # ==================== EXERCISE LOGS ====================
 
 EXERCISE_TYPES = ["Running", "Walking", "Cycling", "Swimming", "Gym/Weights", "Yoga", "HIIT", "Sports", "Dancing", "Other"]
