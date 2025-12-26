@@ -134,6 +134,11 @@ const LandingPage = () => {
               </svg>
               Sign in with Google
             </Button>
+            </div>
+            <div className="flex items-center gap-2 text-muted-foreground">
+              <RefreshCw className="w-4 h-4" />
+              <span className="font-body text-sm">Works offline • Syncs across devices</span>
+            </div>
           </div>
         </div>
       </div>
@@ -172,7 +177,7 @@ const LandingPage = () => {
             Start Your Wellness Journey
           </h2>
           <p className="font-body text-lg text-white/80 mb-10">
-            Join thousands tracking their daily habits and improving their health one tile at a time.
+            Track your habits anywhere—mobile, tablet, or desktop. Your data syncs seamlessly.
           </p>
           <Button
             data-testid="cta-login-button"
