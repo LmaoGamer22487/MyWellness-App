@@ -352,7 +352,22 @@ const Dashboard = ({ user }) => {
 
       {/* Tracker Modals */}
       {activeTracker && (
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-end md:items-center justify-center">
+        <div 
+          className="fixed inset-0 bg-black/50 z-50 flex items-end md:items-center justify-center"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              setActiveTracker(null);
+            }
+          }}
+          onKeyDown={(e) => {
+            if (e.key === "Escape") {
+              setActiveTracker(null);
+            }
+          }}
+          tabIndex={-1}
+          role="dialog"
+          aria-modal="true"
+        >
           <div className="bg-card w-full md:max-w-2xl md:rounded-2xl rounded-t-2xl max-h-[90vh] overflow-hidden animate-slide-up">
             {trackers.map((tracker) => {
               if (tracker.id === activeTracker) {

@@ -448,6 +448,11 @@ async def delete_alcohol_log(log_id: str, user: User = Depends(get_current_user)
 async def log_sleep(log: SleepLogCreate, user: User = Depends(get_current_user)):
     sleep_time = datetime.fromisoformat(log.sleep_time.replace("Z", "+00:00"))
     wake_time = datetime.fromisoformat(log.wake_time.replace("Z", "+00:00"))
+    
+    # Handle cross-midnight sleep: if wake_time is before sleep_time, add a day
+    if wake_time <= sleep_time:
+        wake_time = wake_time + timedelta(days=1)
+    
     hours_slept = (wake_time - sleep_time).total_seconds() / 3600
     
     sleep_log = SleepLog(
