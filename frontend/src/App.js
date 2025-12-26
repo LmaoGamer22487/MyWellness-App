@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route, useNavigate, useLocation } from "react-ro
 import axios from "axios";
 import { Toaster } from "@/components/ui/sonner";
 import { toast } from "sonner";
+import { registerServiceWorker, SyncManager } from "@/utils/offlineSync";
 
 // Pages
 import LandingPage from "@/pages/LandingPage";
@@ -15,6 +16,13 @@ const API = `${BACKEND_URL}/api`;
 
 // Configure axios defaults
 axios.defaults.withCredentials = true;
+
+// Initialize sync manager and service worker
+let syncManager = null;
+if (typeof window !== 'undefined') {
+  registerServiceWorker();
+  syncManager = new SyncManager(API);
+}
 
 // REMINDER: DO NOT HARDCODE THE URL, OR ADD ANY FALLBACKS OR REDIRECT URLS, THIS BREAKS THE AUTH
 const AuthCallback = () => {
