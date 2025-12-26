@@ -364,21 +364,17 @@ const Dashboard = ({ user }) => {
 
       {/* Tracker Modals */}
       {activeTracker && (
-        <>
+        <div className="fixed inset-0 z-50">
           {/* Backdrop - clicking closes modal */}
           <div 
             data-testid="modal-backdrop"
-            className="fixed inset-0 bg-black/50 z-50"
+            className="absolute inset-0 bg-black/50"
             onClick={() => setActiveTracker(null)}
           />
-          {/* Modal Content */}
-          <div 
-            ref={modalRef}
-            className="fixed inset-0 z-50 flex items-end md:items-center justify-center pointer-events-none"
-          >
+          {/* Modal Content Container */}
+          <div className="absolute inset-0 flex items-end md:items-center justify-center p-0 md:p-4">
             <div 
-              className="bg-card w-full md:max-w-2xl md:rounded-2xl rounded-t-2xl max-h-[90vh] overflow-hidden animate-slide-up pointer-events-auto"
-              onClick={(e) => e.stopPropagation()}
+              className="relative bg-card w-full md:max-w-2xl md:rounded-2xl rounded-t-2xl max-h-[90vh] overflow-hidden animate-slide-up shadow-xl"
             >
               {trackers.map((tracker) => {
                 if (tracker.id === activeTracker) {
@@ -397,7 +393,7 @@ const Dashboard = ({ user }) => {
               })}
             </div>
           </div>
-        </>
+        </div>
       )}
     </div>
   );
