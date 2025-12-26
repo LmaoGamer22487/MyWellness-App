@@ -489,13 +489,16 @@ class MyWellnessAPITester:
         return len(self.failed_tests) == 0
 
 def main():
-    print("🚀 Starting LifeTiles Sync API Testing...")
+    print("🚀 Starting MyWellness App API Testing...")
     
-    tester = LifeTilesSyncAPITester()
+    tester = MyWellnessAPITester()
     
     try:
         # Test basic endpoints first
         tester.test_basic_endpoints()
+        
+        # Test PWA manifest (doesn't require auth)
+        tester.test_pwa_manifest()
         
         # Create test user and session
         if tester.create_test_user_session():
@@ -507,6 +510,12 @@ def main():
             
             # Test dashboard endpoints
             tester.test_dashboard_endpoints()
+            
+            # Test new export endpoints
+            tester.test_export_endpoints()
+            
+            # Test new sync endpoints
+            tester.test_sync_endpoints()
         
         # Print summary
         success = tester.print_summary()
