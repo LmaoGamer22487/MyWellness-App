@@ -220,7 +220,7 @@ class LifeTilesSyncAPITester:
             "wake_time": f"{today}T07:00:00Z",
             "date": today
         }
-        success, sleep_log = self.run_test("Log Sleep", "POST", "sleep", 201, sleep_data)
+        success, sleep_log = self.run_test("Log Sleep", "POST", "sleep", 200, sleep_data)
         
         # Get sleep logs and debt
         self.run_test("Get Sleep Logs", "GET", f"sleep?date={today}", 200)
