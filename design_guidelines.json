@@ -1,0 +1,187 @@
+{
+  "identity": {
+    "name": "E1",
+    "role": "The Anti-AI Designer",
+    "mission": "Create a 'Velvet Ledger' aesthetic that blends luxury with utility. Avoid generic SaaS looks.",
+    "principles": [
+      "Fusion over Imitation: Mix Fintech precision with Boutique Hotel warmth.",
+      "Emotion First: Every interaction should feel like a concierge service.",
+      "Content is King: Data is the story, style is the narrator.",
+      "Zoom In: Focus on the micro-interactions of tracking.",
+      "Negative Space: Luxury is space."
+    ]
+  },
+  "typography": {
+    "fonts": {
+      "heading": "Playfair Display",
+      "body": "Manrope"
+    },
+    "weights": {
+      "heading": ["400", "700"],
+      "body": ["400", "500", "600"]
+    },
+    "usage": {
+      "h1": "font-heading text-5xl md:text-6xl font-bold tracking-tight text-primary",
+      "h2": "font-heading text-3xl md:text-4xl font-semibold tracking-tight text-primary/90",
+      "h3": "font-heading text-2xl font-medium text-primary/80",
+      "body": "font-body text-base text-foreground leading-relaxed",
+      "label": "font-body text-xs font-bold uppercase tracking-widest text-muted-foreground"
+    },
+    "installation": "Import fonts via Google Fonts in index.css: @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600&family=Playfair+Display:wght@400;700&display=swap');"
+  },
+  "colors": {
+    "palette": {
+      "background": "#FDFBF7",
+      "foreground": "#2C0B0E",
+      "primary": "#722F37",
+      "primary_foreground": "#FDFBF7",
+      "secondary": "#5D3A9B",
+      "secondary_foreground": "#FFFFFF",
+      "accent": "#D8A7B1",
+      "accent_foreground": "#2C0B0E",
+      "muted": "#F3EFE8",
+      "muted_foreground": "#8A7E80",
+      "card": "#FFFFFF",
+      "card_foreground": "#2C0B0E",
+      "border": "#E6DCDD",
+      "input": "#F3EFE8",
+      "ring": "#722F37"
+    },
+    "semantic_usage": {
+      "background": "Warm Alabaster - Soft, paper-like base.",
+      "primary": "Merlot Burgundy - Used for primary actions, active states, and key headers.",
+      "secondary": "Royal Violet - Used for data visualization accents and secondary actions.",
+      "accent": "Mauve Pink - Used for highlights, success states, and decorative elements.",
+      "text": "Deep Charcoal/Burgundy - Never pure black."
+    },
+    "tailwind_extension": {
+      "colors": {
+        "burgundy": {
+          "50": "#fcf4f5",
+          "100": "#f8e8eb",
+          "200": "#f0d2d8",
+          "300": "#e5b0ba",
+          "400": "#d48293",
+          "500": "#c05a70",
+          "600": "#a63e56",
+          "700": "#8b2d42",
+          "800": "#722f37",
+          "900": "#602a33",
+          "950": "#361319"
+        },
+        "violet": {
+          "50": "#f6f4fe",
+          "100": "#efe9fc",
+          "200": "#e2d6fa",
+          "300": "#cbb6f5",
+          "400": "#af8eee",
+          "500": "#9263e5",
+          "600": "#7d42d8",
+          "700": "#6a2ebc",
+          "800": "#5d3a9b",
+          "900": "#4a1d75",
+          "950": "#2e0b52"
+        }
+      },
+      "fontFamily": {
+        "heading": ["Playfair Display", "serif"],
+        "body": ["Manrope", "sans-serif"]
+      }
+    }
+  },
+  "visual_enhancers": {
+    "glassmorphism": {
+      "style": "backdrop-blur-md bg-white/60 border border-white/40 shadow-sm",
+      "usage": "Sticky headers, floating action buttons, toast notifications."
+    },
+    "borders": {
+      "style": "border border-border/60",
+      "radius": "rounded-xl md:rounded-2xl"
+    },
+    "shadows": {
+      "card": "shadow-[0_2px_8px_rgba(114,47,55,0.08)]",
+      "hover": "shadow-[0_8px_24px_rgba(114,47,55,0.12)]"
+    }
+  },
+  "layout": {
+    "grid_system": {
+      "dashboard": "grid grid-cols-1 md:grid-cols-12 gap-6 p-6 md:p-8",
+      "widgets": {
+        "hero": "col-span-full md:col-span-8 lg:col-span-9",
+        "sidebar": "col-span-full md:col-span-4 lg:col-span-3",
+        "card_tall": "col-span-1 md:col-span-4 row-span-2",
+        "card_wide": "col-span-1 md:col-span-8"
+      }
+    },
+    "spacing": {
+      "container_padding": "p-6 md:p-10 lg:p-16",
+      "section_gap": "gap-8 md:gap-12"
+    }
+  },
+  "components": {
+    "Card": {
+      "base": "bg-card text-card-foreground rounded-xl border border-border/50 shadow-card hover:shadow-hover transition-all duration-300",
+      "header": "p-6 border-b border-border/30",
+      "content": "p-6"
+    },
+    "Button": {
+      "primary": "bg-primary text-primary-foreground hover:bg-primary/90 h-11 px-8 rounded-full font-medium transition-transform active:scale-95 shadow-lg shadow-primary/20",
+      "secondary": "bg-secondary/10 text-secondary hover:bg-secondary/20 h-11 px-8 rounded-full font-medium",
+      "outline": "border-2 border-primary/20 text-primary hover:bg-primary/5 h-11 px-8 rounded-full font-medium"
+    },
+    "Input": {
+      "base": "bg-input/50 border-transparent focus:border-primary/30 focus:bg-background focus:ring-2 focus:ring-primary/10 rounded-lg h-12 px-4 transition-all"
+    }
+  },
+  "images": {
+    "alcohol_tracker": {
+      "url": "https://images.pexels.com/photos/35329976/pexels-photo-35329976.jpeg",
+      "alt": "Elegant cocktail glass",
+      "usage": "Hero image for Alcohol Tracker modal or background accent."
+    },
+    "nutrition_tracker": {
+      "url": "https://images.pexels.com/photos/1640773/pexels-photo-1640773.jpeg",
+      "alt": "Fresh healthy salad bowl",
+      "usage": "Header image for Nutrition section."
+    },
+    "sleep_tracker": {
+      "url": "https://images.pexels.com/photos/35358642/pexels-photo-35358642.jpeg",
+      "alt": "Peaceful bedroom",
+      "usage": "Background for Sleep Tracker setup."
+    },
+    "exercise_tracker": {
+      "url": "https://images.pexels.com/photos/601177/pexels-photo-601177.jpeg",
+      "alt": "Person running in morning",
+      "usage": "Motivation card in Exercise section."
+    },
+    "spending_tracker": {
+      "url": "https://images.pexels.com/photos/12644993/pexels-photo-12644993.jpeg",
+      "alt": "Savings jar with coins",
+      "usage": "Visual for Spending Habits section."
+    }
+  },
+  "instructions_to_main_agent": [
+    "1. SETUP: Install 'lucide-react', 'recharts', 'date-fns', 'clsx', 'tailwind-merge' immediately.",
+    "2. THEME: Update 'tailwind.config.js' with the extended colors (burgundy, violet) and fonts (Playfair Display, Manrope).",
+    "3. GLOBAL CSS: Add the Google Fonts import to 'index.css' and set the base styles.",
+    "4. COMPONENTS: When using Shadcn components, ALWAYS override the default 'rounded-md' with 'rounded-xl' or 'rounded-full' to match the soft aesthetic.",
+    "5. LAYOUT: Build the Main Dashboard using the 'Control Room' grid logic. Use the 'Card' component styles defined above.",
+    "6. CHARTS: Use Recharts. Style the lines/bars with the 'violet' and 'accent' (pink) colors. Avoid default blues.",
+    "7. IMAGES: Use the provided Pexels URLs for the respective sections. Do not use placeholders.",
+    "8. AI INTEGRATION: Mock the Gemini API calls for now, but build the UI to display the 'Healthier Choice Y/N' and calorie analysis clearly.",
+    "9. CALENDAR: Create a custom view or use a library like 'react-big-calendar' styled to match the theme (no default blue headers).",
+    "10. TESTING: Add 'data-testid' to all interactive elements (buttons, inputs, cards)."
+  ],
+  "universal_guidelines": {
+    "anti_patterns": [
+      "No generic 'Inter' font for headings.",
+      "No default blue/slate color palettes.",
+      "No sharp 90-degree corners (unless intentional for brutalism - not here).",
+      "No dense, cluttered tables without breathing room."
+    ],
+    "accessibility": [
+      "Ensure text contrast on the 'accent' (pink) background is sufficient (use dark text).",
+      "Focus states must be visible (use 'ring-primary')."
+    ]
+  }
+}
