@@ -12,8 +12,10 @@ import {
   LogOut,
   Calendar as CalendarIcon,
   Plus,
-  ChevronLeft,
-  ChevronRight,
+  Download,
+  Settings,
+  Wifi,
+  WifiOff,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -22,6 +24,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Cell } from "recharts";
@@ -38,6 +41,7 @@ const API = `${BACKEND_URL}/api`;
 const Dashboard = ({ user }) => {
   const navigate = useNavigate();
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [activeTracker, setActiveTracker] = useState(null);
   const [completion, setCompletion] = useState(null);
   const [weeklyCompletion, setWeeklyCompletion] = useState([]);
