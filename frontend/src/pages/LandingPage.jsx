@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { Wine, Moon, Utensils, Wallet, Dumbbell, BarChart3 } from "lucide-react";
+import { Wine, Moon, Utensils, Wallet, Dumbbell, BarChart3, Smartphone, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
