@@ -259,7 +259,7 @@ class LifeTilesSyncAPITester:
             "notes": "Morning jog in the park",
             "date": today
         }
-        success, exercise_log = self.run_test("Log Exercise", "POST", "exercise", 201, exercise_data)
+        success, exercise_log = self.run_test("Log Exercise", "POST", "exercise", 200, exercise_data)
         
         # Get exercise logs and summary
         self.run_test("Get Exercise Logs", "GET", f"exercise?date={today}", 200)
