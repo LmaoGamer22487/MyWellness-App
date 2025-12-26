@@ -1030,7 +1030,7 @@ async def get_weekly_completion(user: User = Depends(get_current_user)):
 
 @api_router.get("/")
 async def root():
-    return {"message": "LifeTiles Sync API"}
+    return {"message": "MyWellness App API"}
 
 app.include_router(api_router)
 

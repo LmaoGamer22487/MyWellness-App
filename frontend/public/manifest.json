@@ -1,0 +1,27 @@
+{
+  "name": "MyWellness App",
+  "short_name": "MyWellness",
+  "description": "Track your wellness: alcohol, sleep, nutrition, spending, and exercise",
+  "start_url": "/dashboard",
+  "display": "standalone",
+  "background_color": "#FDFBF7",
+  "theme_color": "#722F37",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "/logo192.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/logo512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["health", "fitness", "lifestyle"],
+  "screenshots": [],
+  "prefer_related_applications": false
+}
