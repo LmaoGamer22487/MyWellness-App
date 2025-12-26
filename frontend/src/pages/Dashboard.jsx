@@ -61,6 +61,24 @@ const Dashboard = ({ user }) => {
     return () => document.removeEventListener("keydown", handleEscape);
   }, [activeTracker]);
 
+  // Track online/offline status
+  useEffect(() => {
+    const handleOnline = () => {
+      setIsOnline(true);
+      toast.success("You're back online! Syncing data...");
+    };
+    const handleOffline = () => {
+      setIsOnline(false);
+      toast.warning("You're offline. Changes will sync when connected.");
+    };
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
+    return () => {
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
+    };
+  }, []);
+
   const fetchCompletion = useCallback(async () => {
     try {
       const response = await axios.get(`${API}/dashboard/completion`, {
@@ -95,6 +113,25 @@ const Dashboard = ({ user }) => {
     fetchWeeklyCompletion();
     fetchPreferences();
   }, [fetchCompletion, fetchWeeklyCompletion, fetchPreferences]);
+
+  const handleExportSpending = async () => {
+    try {
+      const month = format(selectedDate, "yyyy-MM");
+      window.open(`${API}/export/spending?month=${month}`, "_blank");
+      toast.success("Downloading spending export...");
+    } catch (error) {
+      toast.error("Failed to export spending data");
+    }
+  };
+
+  const handleExportAll = async () => {
+    try {
+      window.open(`${API}/export/all`, "_blank");
+      toast.success("Downloading all data export...");
+    } catch (error) {
+      toast.error("Failed to export data");
+    }
+  };
 
   const handleLogout = async () => {
     try {
