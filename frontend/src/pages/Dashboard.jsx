@@ -364,40 +364,40 @@ const Dashboard = ({ user }) => {
 
       {/* Tracker Modals */}
       {activeTracker && (
-        <div 
-          className="fixed inset-0 bg-black/50 z-50 flex items-end md:items-center justify-center"
-          onClick={(e) => {
-            if (e.target === e.currentTarget) {
-              setActiveTracker(null);
-            }
-          }}
-          onKeyDown={(e) => {
-            if (e.key === "Escape") {
-              setActiveTracker(null);
-            }
-          }}
-          tabIndex={-1}
-          role="dialog"
-          aria-modal="true"
-        >
-          <div className="bg-card w-full md:max-w-2xl md:rounded-2xl rounded-t-2xl max-h-[90vh] overflow-hidden animate-slide-up">
-            {trackers.map((tracker) => {
-              if (tracker.id === activeTracker) {
-                const TrackerComponent = tracker.component;
-                return (
-                  <TrackerComponent
-                    key={tracker.id}
-                    date={dateStr}
-                    preferences={preferences}
-                    onClose={() => setActiveTracker(null)}
-                    onSave={refreshData}
-                  />
-                );
-              }
-              return null;
-            })}
+        <>
+          {/* Backdrop - clicking closes modal */}
+          <div 
+            data-testid="modal-backdrop"
+            className="fixed inset-0 bg-black/50 z-50"
+            onClick={() => setActiveTracker(null)}
+          />
+          {/* Modal Content */}
+          <div 
+            ref={modalRef}
+            className="fixed inset-0 z-50 flex items-end md:items-center justify-center pointer-events-none"
+          >
+            <div 
+              className="bg-card w-full md:max-w-2xl md:rounded-2xl rounded-t-2xl max-h-[90vh] overflow-hidden animate-slide-up pointer-events-auto"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {trackers.map((tracker) => {
+                if (tracker.id === activeTracker) {
+                  const TrackerComponent = tracker.component;
+                  return (
+                    <TrackerComponent
+                      key={tracker.id}
+                      date={dateStr}
+                      preferences={preferences}
+                      onClose={() => setActiveTracker(null)}
+                      onSave={refreshData}
+                    />
+                  );
+                }
+                return null;
+              })}
+            </div>
           </div>
-        </div>
+        </>
       )}
     </div>
   );
