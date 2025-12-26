@@ -1,34 +1,97 @@
-.App-logo {
-    height: 40vmin;
-    pointer-events: none;
+/* Custom styles for LifeTiles Sync */
+
+.tracker-card {
+    @apply bg-card text-card-foreground rounded-xl border border-border/50 shadow-card hover:shadow-card-hover transition-all duration-300;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-    .App-logo {
-        animation: App-logo-spin infinite 20s linear;
-    }
+.tracker-card-header {
+    @apply p-6 border-b border-border/30;
 }
 
-.App-header {
-    background-color: #0f0f10;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-size: calc(10px + 2vmin);
-    color: white;
+.tracker-card-content {
+    @apply p-6;
 }
 
-.App-link {
-    color: #61dafb;
+.btn-primary {
+    @apply bg-primary text-primary-foreground hover:bg-primary/90 h-11 px-8 rounded-full font-medium transition-transform active:scale-95 shadow-lg shadow-primary/20;
 }
 
-@keyframes App-logo-spin {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
+.btn-secondary {
+    @apply bg-secondary/10 text-secondary hover:bg-secondary/20 h-11 px-8 rounded-full font-medium;
+}
+
+.btn-outline {
+    @apply border-2 border-primary/20 text-primary hover:bg-primary/5 h-11 px-8 rounded-full font-medium;
+}
+
+.input-field {
+    @apply bg-input/50 border-transparent focus:border-primary/30 focus:bg-background focus:ring-2 focus:ring-primary/10 rounded-lg h-12 px-4 transition-all;
+}
+
+.completion-ring {
+    transition: stroke-dashoffset 0.5s ease-out;
+}
+
+/* Calendar styling */
+.rdp {
+    --rdp-cell-size: 40px;
+    --rdp-accent-color: hsl(352, 42%, 33%);
+    --rdp-background-color: hsl(346, 35%, 75%);
+}
+
+.rdp-day_selected {
+    background-color: hsl(352, 42%, 33%) !important;
+    color: hsl(42, 33%, 98%) !important;
+}
+
+.rdp-day_today {
+    border: 2px solid hsl(262, 45%, 42%);
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-slide-up {
+    animation: slideUp 0.4s ease-out;
+}
+
+/* Progress ring */
+.progress-ring {
+    transform: rotate(-90deg);
+}
+
+.progress-ring-circle {
+    transition: stroke-dashoffset 0.5s ease-out;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: hsl(36, 23%, 93%);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: hsl(352, 15%, 75%);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: hsl(352, 42%, 33%);
 }
