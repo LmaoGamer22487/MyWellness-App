@@ -74,7 +74,14 @@ class MyWellnessAPITester:
         print("="*50)
         
         # Test root API endpoint
-        self.run_test("Root API", "GET", "", 200)
+        success, response = self.run_test("Root API", "GET", "", 200)
+        if success and isinstance(response, dict):
+            message = response.get('message', '')
+            if 'MyWellness' in message:
+                print("✅ API correctly identifies as MyWellness App")
+            else:
+                print(f"⚠️  API message: {message} (expected MyWellness reference)")
+        
         
         # Test drinks database
         success, drinks = self.run_test("Drinks Database", "GET", "drinks", 200)
