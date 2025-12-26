@@ -3,7 +3,7 @@ import sys
 import json
 from datetime import datetime, timezone, timedelta
 
-class LifeTilesSyncAPITester:
+class MyWellnessAPITester:
     def __init__(self, base_url="https://lifetiles-sync.preview.emergentagent.com"):
         self.base_url = base_url
         self.api_url = f"{base_url}/api"
