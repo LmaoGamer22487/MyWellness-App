@@ -272,6 +272,127 @@ class MyWellnessAPITester:
         self.run_test("Get Exercise Logs", "GET", f"exercise?date={today}", 200)
         self.run_test("Get Exercise Summary", "GET", "exercise/summary", 200)
 
+    def test_export_endpoints(self):
+        """Test CSV export endpoints"""
+        print("\n" + "="*50)
+        print("TESTING EXPORT ENDPOINTS")
+        print("="*50)
+        
+        if not self.session_token:
+            print("❌ No session token available, skipping export tests")
+            return False
+        
+        # Test spending export
+        success, response = self.run_test("Export Spending CSV", "GET", "export/spending", 200)
+        if success:
+            print("✅ Spending export endpoint working")
+        
+        # Test spending export with month parameter
+        current_month = datetime.now().strftime("%Y-%m")
+        success, response = self.run_test("Export Spending CSV (with month)", "GET", f"export/spending?month={current_month}", 200)
+        if success:
+            print("✅ Spending export with month parameter working")
+        
+        # Test all data export
+        success, response = self.run_test("Export All Data CSV", "GET", "export/all", 200)
+        if success:
+            print("✅ All data export endpoint working")
+        
+        # Test all data export with date range
+        today = datetime.now().date()
+        start_date = (today - timedelta(days=7)).isoformat()
+        end_date = today.isoformat()
+        success, response = self.run_test("Export All Data CSV (with dates)", "GET", f"export/all?start_date={start_date}&end_date={end_date}", 200)
+        if success:
+            print("✅ All data export with date range working")
+
+    def test_sync_endpoints(self):
+        """Test PWA sync endpoints"""
+        print("\n" + "="*50)
+        print("TESTING SYNC ENDPOINTS (PWA)")
+        print("="*50)
+        
+        if not self.session_token:
+            print("❌ No session token available, skipping sync tests")
+            return False
+        
+        # Test sync pull endpoint
+        success, response = self.run_test("Sync Pull", "GET", "sync/pull", 200)
+        if success:
+            print("✅ Sync pull endpoint working")
+            if isinstance(response, dict):
+                keys = list(response.keys())
+                print(f"   Response includes: {keys}")
+                if 'timestamp' in response:
+                    print("✅ Sync pull includes timestamp")
+        
+        # Test sync pull with since parameter
+        since_time = (datetime.now(timezone.utc) - timedelta(hours=1)).isoformat()
+        success, response = self.run_test("Sync Pull (with since)", "GET", f"sync/pull?since={since_time}", 200)
+        if success:
+            print("✅ Sync pull with since parameter working")
+        
+        # Test sync push endpoint
+        sync_data = {
+            "alcohol_logs": [],
+            "sleep_logs": [],
+            "nutrition_logs": [],
+            "spending_logs": [],
+            "exercise_logs": [],
+            "last_sync": datetime.now(timezone.utc).isoformat()
+        }
+        success, response = self.run_test("Sync Push", "POST", "sync/push", 200, sync_data)
+        if success:
+            print("✅ Sync push endpoint working")
+            if isinstance(response, dict):
+                if 'synced' in response:
+                    print(f"   Synced counts: {response['synced']}")
+                if 'timestamp' in response:
+                    print("✅ Sync push includes timestamp")
+
+    def test_pwa_manifest(self):
+        """Test PWA manifest accessibility"""
+        print("\n" + "="*50)
+        print("TESTING PWA MANIFEST")
+        print("="*50)
+        
+        # Test manifest.json accessibility
+        manifest_url = f"{self.base_url}/manifest.json"
+        success, response = self.run_test("PWA Manifest", "GET", manifest_url, 200)
+        if success:
+            print("✅ PWA manifest.json accessible")
+            try:
+                if isinstance(response, dict):
+                    name = response.get('name', '')
+                    short_name = response.get('short_name', '')
+                    if 'MyWellness' in name:
+                        print("✅ Manifest correctly identifies as MyWellness App")
+                    else:
+                        print(f"⚠️  Manifest name: {name} (expected MyWellness reference)")
+                    
+                    if 'MyWellness' in short_name:
+                        print("✅ Manifest short name correctly set to MyWellness")
+                    else:
+                        print(f"⚠️  Manifest short name: {short_name}")
+                        
+                    # Check for required PWA fields
+                    required_fields = ['start_url', 'display', 'background_color', 'theme_color', 'icons']
+                    for field in required_fields:
+                        if field in response:
+                            print(f"✅ Manifest has {field}")
+                        else:
+                            print(f"❌ Manifest missing {field}")
+            except Exception as e:
+                print(f"⚠️  Could not parse manifest: {e}")
+        
+        # Test service worker (if exists)
+        sw_url = f"{self.base_url}/sw.js"
+        success, response = self.run_test("Service Worker", "GET", sw_url, 200)
+        if success:
+            print("✅ Service worker accessible")
+        else:
+            print("⚠️  Service worker not found (may be optional)")
+
     def test_dashboard_endpoints(self):
         """Test dashboard completion endpoints"""
         print("\n" + "="*50)
