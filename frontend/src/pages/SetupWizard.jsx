@@ -66,7 +66,7 @@ const SetupWizard = ({ user }) => {
       {/* Header */}
       <div className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-10">
         <div className="max-w-3xl mx-auto px-6 py-4 flex items-center justify-between">
-          <h1 className="font-heading text-2xl font-bold text-primary">LifeTiles Sync</h1>
+          <h1 className="font-heading text-2xl font-bold text-primary">MyWellness</h1>
           <span className="font-body text-sm text-muted-foreground">
             Step {step} of 2
           </span>

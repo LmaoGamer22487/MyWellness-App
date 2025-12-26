@@ -178,7 +178,7 @@ const Dashboard = ({ user }) => {
       <header className="border-b border-border bg-card/80 backdrop-blur-sm sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 md:px-6 py-4 flex items-center justify-between">
           <h1 className="font-heading text-xl md:text-2xl font-bold text-primary">
-            LifeTiles Sync
+            MyWellness
           </h1>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
