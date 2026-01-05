@@ -1,11 +1,67 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <title>My Wellness App</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      body {
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+          sans-serif;
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #dbeafe, #fce7f3);
+      }
+      .card {
+        background: white;
+        padding: 24px 28px;
+        border-radius: 16px;
+        box-shadow: 0 10px 25px rgba(15, 23, 42, 0.2);
+        max-width: 460px;
+        text-align: center;
+      }
+      h1 {
+        margin: 0 0 8px;
+        font-size: 1.8rem;
+      }
+      p {
+        margin: 0 0 16px;
+        color: #4b5563;
+      }
+      ul {
+        list-style: none;
+        padding: 0;
+        margin: 0 0 10px;
+      }
+      li {
+        margin: 4px 0;
+      }
+      .pill {
+        display: inline-block;
+        padding: 4px 10px;
+        border-radius: 999px;
+        background: #ecfdf5;
+        color: #15803d;
+        font-size: 0.8rem;
+        font-weight: 600;
+      }
+    </style>
   </head>
   <body>
-    <h1>My Wellness App</h1>
-    <p>If you can read this, the Vercel deployment works.</p>
+    <main class="card">
+      <h1>My Wellness App</h1>
+      <p>Track habits, mood, sleep, and movement in one simple dashboard.</p>
+      <ul>
+        <li>✔ Daily habit checklist</li>
+        <li>✔ Mood and energy reflection</li>
+        <li>✔ Sleep & movement overview</li>
+      </ul>
+      <div class="pill">If you see this, the wellness app deployment works ✅</div>
+    </main>
   </body>
 </html>
+
