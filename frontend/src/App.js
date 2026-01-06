@@ -5,6 +5,25 @@ import axios from "axios";
 import { Toaster } from "@/components/ui/sonner";
 import { toast } from "sonner";
 import { registerServiceWorker, SyncManager } from "@/utils/offlineSync";
+import { GoogleOAuthProvider } from '@react-oauth/google';
+
+// Add this constant at the top
+const GOOGLE_CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID || '1087649257424-hslvdpnlpd7htfsrmaiasladbv2so6mu.apps.googleusercontent.com';
+
+// Wrap your App return statement:
+function App() {
+  return (
+    <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+      <div className="App">
+        <BrowserRouter>
+          <AppRouter />
+          <Toaster position="top-right" richColors />
+        </BrowserRouter>
+      </div>
+    </GoogleOAuthProvider>
+  );
+}
+
 
 // Pages
 import LandingPage from "@/pages/LandingPage";
