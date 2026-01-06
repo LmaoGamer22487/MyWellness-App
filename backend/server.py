@@ -13,6 +13,8 @@ from datetime import datetime, timezone, timedelta
 import httpx
 import csv
 import io
+from google.oauth2 import id_token
+from google.auth.transport import requests as google_requests
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -21,6 +23,85 @@ load_dotenv(ROOT_DIR / '.env')
 mongo_url = os.environ['MONGO_URL']
 client = AsyncIOMotorClient(mongo_url)
 db = client[os.environ['DB_NAME']]
+
+# Add new endpoint for Google OAuth
+@api_router.post("/auth/google")
+async def google_auth(request: Request):
+    data = await request.json()
+    access_token = data.get("access_token")
+    
+    if not access_token:
+        raise HTTPException(status_code=400, detail="No access token provided")
+    
+    try:
+        # Verify the token with Google
+        async with httpx.AsyncClient() as client:
+            userinfo_response = await client.get(
+                'https://www.googleapis.com/oauth2/v3/userinfo',
+                headers={'Authorization': f'Bearer {access_token}'}
+            )
+            
+            if userinfo_response.status_code != 200:
+                raise HTTPException(status_code=401, detail="Invalid token")
+            
+            user_info = userinfo_response.json()
+            
+        # Create or get user
+        user_id = f"user_{uuid.uuid4().hex[:12]}"
+        existing_user = await db.users.find_one({"email": user_info["email"]}, {"_id": 0})
+        
+        if existing_user:
+            user_id = existing_user["user_id"]
+        else:
+            await db.users.insert_one({
+                "user_id": user_id,
+                "email": user_info["email"],
+                "name": user_info.get("name", ""),
+                "picture": user_info.get("picture"),
+                "created_at": datetime.now(timezone.utc).isoformat()
+            })
+            await db.user_preferences.insert_one({
+                "user_id": user_id,
+                "target_sleep_hours": 7.5,
+                "usual_sleep_time": "23:00",
+                "usual_wake_time": "06:30",
+                "late_night_days": [],
+                "daily_calorie_goal": 2000,
+                "daily_protein_goal": 100,
+                "setup_completed": False
+            })
+        
+        # Create session
+        session_token = f"session_{uuid.uuid4().hex}"
+        expires_at = datetime.now(timezone.utc) + timedelta(days=7)
+        
+        await db.user_sessions.delete_many({"user_id": user_id})
+        await db.user_sessions.insert_one({
+            "user_id": user_id,
+            "session_token": session_token,
+            "expires_at": expires_at.isoformat(),
+            "created_at": datetime.now(timezone.utc).isoformat()
+        })
+        
+        response = Response()
+        response.set_cookie(
+            key="session_token",
+            value=session_token,
+            httponly=True,
+            secure=True,
+            samesite="none",
+            path="/",
+            max_age=7*24*60*60
+        )
+        
+        user = await db.users.find_one({"user_id": user_id}, {"_id": 0})
+        prefs = await db.user_preferences.find_one({"user_id": user_id}, {"_id": 0})
+        
+        return {"user": user, "setup_completed": prefs.get("setup_completed", False) if prefs else False}
+        
+    except Exception as e:
+        logging.error(f"Google auth failed: {e}")
+        raise HTTPException(status_code=401, detail="Authentication failed")
 
 app = FastAPI()
 api_router = APIRouter(prefix="/api")
