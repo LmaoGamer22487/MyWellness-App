@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Wine, Moon, Utensils, Wallet, Dumbbell, BarChart3, Smartphone, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { GoogleLoginButton } from "@/components/GoogleLoginButton";
+import { toast } from "sonner";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
@@ -33,11 +35,6 @@ const LandingPage = () => {
     };
     checkAuth();
   }, [navigate]);
-
-  const handleLogin = () => {
-    const redirectUrl = window.location.origin + "/dashboard";
-    window.location.href = `https://auth.emergentagent.com/?redirect=${encodeURIComponent(redirectUrl)}`;
-  };
 
   if (checking) {
     return (
@@ -111,7 +108,20 @@ const LandingPage = () => {
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Button
                 data-testid="login-button"
-                onClick={handleLogin}
+                <GoogleLoginButton 
+                  onSuccess={(data) => {
+                    const { user, setup_completed } = data;
+                    if (setup_completed) {
+                      navigate("/dashboard", { state: { user }, replace: true });
+                    } else {
+                      navigate("/setup", { state: { user }, replace: true });
+                    }
+                  }}
+                onError={(error) => {
+                  toast.error("Authentication failed");
+                }}
+                />
+
                 className="bg-primary text-primary-foreground hover:bg-primary/90 h-14 px-10 rounded-full font-medium text-lg transition-transform active:scale-95 shadow-lg shadow-primary/20"
               >
                 <svg className="w-5 h-5 mr-3" viewBox="0 0 24 24">
@@ -181,7 +191,20 @@ const LandingPage = () => {
           </p>
           <Button
             data-testid="cta-login-button"
-            onClick={handleLogin}
+            <GoogleLoginButton 
+              onSuccess={(data) => {
+                const { user, setup_completed } = data;
+                if (setup_completed) {
+                  navigate("/dashboard", { state: { user }, replace: true });
+                } else {
+                  navigate("/setup", { state: { user }, replace: true });
+                }
+              }}
+              onError={(error) => {
+                toast.error("Authentication failed");
+              }}
+            />
+
             className="bg-white text-primary hover:bg-white/90 h-14 px-10 rounded-full font-medium text-lg transition-transform active:scale-95"
           >
             Get Started Free
