@@ -141,7 +141,7 @@ const LandingPage = () => {
                 />
               </svg>
               Sign in with Google
-            </Button>
+  
             </div>
             <div className="flex items-center gap-2 text-muted-foreground">
               <RefreshCw className="w-4 h-4" />
@@ -204,7 +204,7 @@ const LandingPage = () => {
             className="bg-white text-primary hover:bg-white/90 h-14 px-10 rounded-full font-medium text-lg transition-transform active:scale-95"
           >
             Get Started Free
-          </Button>
+
         </div>
       </div>
 
