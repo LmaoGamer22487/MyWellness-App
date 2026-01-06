@@ -162,15 +162,8 @@ function AppRouter() {
   );
 }
 
-function App() {
-  return (
-    <div className="App">
-      <BrowserRouter>
-        <AppRouter />
-        <Toaster position="top-right" richColors />
-      </BrowserRouter>
-    </div>
-  );
-}
+
+export default App;
+
 
 export default App;
