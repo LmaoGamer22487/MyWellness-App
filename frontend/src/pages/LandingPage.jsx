@@ -106,8 +106,6 @@ const LandingPage = () => {
               Your personal wellness dashboard. Track alcohol, sleep, nutrition, spending, and exercise—works on any device with offline sync.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Button
-                data-testid="login-button"
                 <GoogleLoginButton 
                   onSuccess={(data) => {
                     const { user, setup_completed } = data;
@@ -189,8 +187,6 @@ const LandingPage = () => {
           <p className="font-body text-lg text-white/80 mb-10">
             Track your habits anywhere—mobile, tablet, or desktop. Your data syncs seamlessly.
           </p>
-          <Button
-            data-testid="cta-login-button"
             <GoogleLoginButton 
               onSuccess={(data) => {
                 const { user, setup_completed } = data;
